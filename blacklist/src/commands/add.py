@@ -8,7 +8,7 @@ from datetime import datetime
 import pytz
 from requests import Response
 import os
-from errors.errors import ApiError, NotToken, TokenInvalid, NotFound, BadRequest
+from errors.errors import ApiError, NotToken, TokenInvalid, NotFound, BadRequest, EmailExist
 
 class AddEmail(BaseCommannd):
     def __init__(self, data, token, client_ip):
@@ -26,6 +26,11 @@ class AddEmail(BaseCommannd):
         
         if not isinstance(self.data['email'], str) or not isinstance(self.data['app_uuid'], str) or not isinstance(self.data['blocked_reason'], str):
             raise BadRequest
+
+        check_email = Email.query.filter_by(email=self.data['email']).first()
+
+        if check_email is not None: 
+            raise EmailExist
 
         new_email = Email(
             app_id=self.data['app_uuid'],

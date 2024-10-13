@@ -17,3 +17,7 @@ class NotFound(ApiError):
 class BadRequest(ApiError):
     code = 412
     description = "La información suministrada es erronea"
+
+class EmailExist(ApiError):
+    code = 409
+    description = 'El email ya se encuentra en la lista negra'
