@@ -21,3 +21,12 @@ class BadRequest(ApiError):
 class EmailExist(ApiError):
     code = 409
     description = 'El email ya se encuentra en la lista negra'
+    
+class TokenDontExist(ApiError):
+    code = 403
+    
+class TokenInvalid(ApiError):
+    code = 401
+
+class NotFoundPost(ApiError):
+    code = 404

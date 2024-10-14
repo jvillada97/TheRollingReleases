@@ -3,6 +3,8 @@ import os
 from flask.json import jsonify
 from commands.add import AddEmail
 from errors.errors import ApiError, NotToken, TokenInvalid
+from errors.errors import NotFoundPost, TokenDontExist
+from models.models import Email
 
 emails_blueprint = Blueprint('emails', __name__)
 
@@ -21,3 +23,24 @@ def add():
 @emails_blueprint.route('/emails/ping', methods = ['GET'])
 def ping():
     return 'pong', 200
+
+@emails_blueprint.route('/emails/<string:email>', methods = ['GET'])
+def read(email):
+    authorization_token = request.headers.get('Authorization')
+    token = None
+    if authorization_token is not None:
+        token = authorization_token.replace('Bearer ', '')
+    else:
+        raise TokenDontExist
+    
+    email_bd = Email.query.filter(Email.email == email).first()
+    if email_bd is None:
+        return jsonify({
+        "exist": False,
+        }), 200
+    
+    else:    
+        return jsonify({
+        "exist": True,
+        "reason": email_bd.reason
+        }), 200
