@@ -4,7 +4,6 @@ from flask.json import jsonify
 from commands.get import GetEmail
 from commands.add import AddEmail
 from errors.errors import ApiError, NotToken, TokenInvalid
-from errors.errors import NotFoundPost, TokenDontExist
 from models.models import Email
 
 emails_blueprint = Blueprint('emails', __name__)
@@ -32,7 +31,7 @@ def read(email):
     if authorization_token is not None:
         token = authorization_token.replace('Bearer ', '')
     else:
-        raise TokenDontExist
+        raise NotToken
     
     GetEmail(email, token).execute()
  
