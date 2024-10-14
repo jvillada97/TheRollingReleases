@@ -1,5 +1,5 @@
-from models.models import db, Email
-from commands.base_command import BaseCommannd
+from src.models.models import db, Email
+from src.commands.base_command import BaseCommannd
 from sqlalchemy.exc import SQLAlchemyError
 import hashlib
 import uuid
@@ -8,7 +8,7 @@ from datetime import datetime
 import pytz
 from requests import Response
 import os
-from errors.errors import ApiError, NotToken, TokenInvalid, NotFound, BadRequest, EmailExist
+from src.errors.errors import ApiError, NotToken, TokenInvalid, NotFound, BadRequest, EmailExist
 
 class AddEmail(BaseCommannd):
     def __init__(self, data, token, client_ip):

@@ -1,10 +1,10 @@
 from flask import request, Blueprint
 import os
 from flask.json import jsonify
-from commands.get import GetEmail
-from commands.add import AddEmail
-from errors.errors import ApiError, NotToken, TokenInvalid
-from models.models import Email
+from src.commands.get import GetEmail
+from src.commands.add import AddEmail
+from src.errors.errors import ApiError, NotToken, TokenInvalid
+from src.models.models import Email
 
 emails_blueprint = Blueprint('emails', __name__)
 
