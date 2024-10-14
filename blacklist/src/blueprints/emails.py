@@ -20,11 +20,11 @@ def add():
         raise NotToken
     return AddEmail(data, token, client_ip).execute()
 
-@emails_blueprint.route('/emails/ping', methods = ['GET'])
+@emails_blueprint.route('/blacklists/ping', methods = ['GET'])
 def ping():
     return 'pong', 200
 
-@emails_blueprint.route('/emails/<string:email>', methods = ['GET'])
+@emails_blueprint.route('/blacklists/<string:email>', methods = ['GET'])
 def read(email):
     authorization_token = request.headers.get('Authorization')
     token = None
@@ -33,5 +33,5 @@ def read(email):
     else:
         raise NotToken
     
-    GetEmail(email, token).execute()
+    return GetEmail(email, token).execute()
  
