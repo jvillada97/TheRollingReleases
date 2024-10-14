@@ -1,6 +1,7 @@
 from flask import request, Blueprint
 import os
 from flask.json import jsonify
+from commands.get import GetEmail
 from commands.add import AddEmail
 from errors.errors import ApiError, NotToken, TokenInvalid
 from errors.errors import NotFoundPost, TokenDontExist
@@ -33,14 +34,5 @@ def read(email):
     else:
         raise TokenDontExist
     
-    email_bd = Email.query.filter(Email.email == email).first()
-    if email_bd is None:
-        return jsonify({
-        "exist": False,
-        }), 200
-    
-    else:    
-        return jsonify({
-        "exist": True,
-        "reason": email_bd.reason
-        }), 200
+    GetEmail(email, token).execute()
+ 
