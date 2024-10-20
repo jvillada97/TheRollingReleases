@@ -1,0 +1,243 @@
+{
+	"info": {
+		"_postman_id": "2e5a8d74-dd50-4baa-83ba-0e1eeb9183dc",
+		"name": "DevOps",
+		"description": "Documentación y solicitudes para ejecutar los endpoints del backend para añadir y verificar si un correo esta en la blacklist. Grupo TheRollingReleases",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30550594"
+	},
+	"item": [
+		{
+			"name": "Añadir email a lista negra",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "qwerty",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"pepito@hotmail.com\",\n    \"app_uuid\": \"95806c44-99d0-48f8-bc2c-ed740e022576\",\n    \"blocked_reason\": \"Test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://blacklist-env.eba-93e36xxy.us-east-1.elasticbeanstalk.com//blacklists",
+					"protocol": "http",
+					"host": [
+						"blacklist-env",
+						"eba-93e36xxy",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"",
+						"blacklists"
+					]
+				},
+				"description": "Permite añadir un correo a la blacklist de la compañía, este endpoint hace diferentes verificaciones para validar que la solicitud sea correcta: Primero verifica que la solicitud venga con un token, luego verifica que este token sea válido y por último verifica que los campos de los parámetros estén completos y en el formato correcto. También verifica que el correo a añadir no este previamente en la base de datos.   \nParámetros: \n\n- email: Correo electrónico que será añadido a la lista negra de la compañía. \n    \n- app_uuid:  id en formato UUID de la app cliente. \n    \n- blocked_reason: razón por la cual se agrega el correo a la lista negra."
+			},
+			"response": [
+				{
+					"name": "Faltan parametros",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"pepito@hotmail.com\",\n    \"app_uuid\": \"95806c44-99d0-48f8-bc2c-ed740e022576\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/blacklists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"message\": \"Faltan campos en la solicitud\"\n}"
+				},
+				{
+					"name": "Parametros en formato invalido",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"pepito@hotmail.com\",\n    \"app_uuid\": \"95806c44-99d0-48f8-bc2c-ed740e022576\",\n    \"blocked_reason\": 349389\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/blacklists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "Precondition Failed",
+					"code": 412,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"message\": \"La información suministrada es erronea\"\n}"
+				},
+				{
+					"name": "Email ya existente en blacklist",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"pepito@hotmail.com\",\n    \"app_uuid\": \"95806c44-99d0-48f8-bc2c-ed740e022576\",\n    \"blocked_reason\": \"Test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/blacklists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"message\": \"El email ya se encuentra en la lista negra\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Verificar si email esta en la lista negra",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "qwerty",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://blacklist-env.eba-93e36xxy.us-east-1.elasticbeanstalk.com//blacklists/pepito@hotmail.com",
+					"protocol": "http",
+					"host": [
+						"blacklist-env",
+						"eba-93e36xxy",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"",
+						"blacklists",
+						"pepito@hotmail.com"
+					]
+				},
+				"description": "Permite verificar que el correo que viene como parámetro dentro de la solicitud HTTP ya hace parte o no de la lista negra de la compañía.  \nParámetros:\n\n- email: Correo electrónico que será verificado si está o no en la lista negra."
+			},
+			"response": []
+		},
+		{
+			"name": "Salud del microservicio",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "qwerty",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://blacklist-env.eba-93e36xxy.us-east-1.elasticbeanstalk.com//blacklists/ping",
+					"protocol": "http",
+					"host": [
+						"blacklist-env",
+						"eba-93e36xxy",
+						"us-east-1",
+						"elasticbeanstalk",
+						"com"
+					],
+					"path": [
+						"",
+						"blacklists",
+						"ping"
+					]
+				},
+				"description": "Permite verificar que el microservicio esté disponible para recibir solicitudes."
+			},
+			"response": []
+		}
+	]
+}
