@@ -1,0 +1,440 @@
+{
+	"info": {
+		"_postman_id": "71775e09-fe3d-467f-9a87-7c3f2d0030e4",
+		"name": "DevOps",
+		"description": "Documentación y solicitudes para ejecutar los endpoints del backend para añadir y verificar si un correo esta en la blacklist. Grupo TheRollingReleases",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30380766",
+		"_collection_link": "https://cloud7-7346.postman.co/workspace/Cloud-Workspace~a3e49628-c461-47d7-b460-9d221d96b3e9/collection/38231226-71775e09-fe3d-467f-9a87-7c3f2d0030e4?action=share&source=collection_link&creator=30380766"
+	},
+	"item": [
+		{
+			"name": "Añadir email a lista negra",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "qwerty",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"pepito@hotmail.com\",\n    \"app_uuid\": \"95806c44-99d0-48f8-bc2c-ed740e022576\",\n    \"blocked_reason\": \"Test\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/blacklists",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"blacklists"
+					]
+				},
+				"description": "Permite añadir un correo a la blacklist de la compañía, este endpoint hace diferentes verificaciones para validar que la solicitud sea correcta: Primero verifica que la solicitud venga con un token, luego verifica que este token sea válido y por último verifica que los campos de los parámetros estén completos y en el formato correcto. También verifica que el correo a añadir no este previamente en la base de datos.   \nParámetros: \n\n- email: Correo electrónico que será añadido a la lista negra de la compañía. \n    \n- app_uuid:  id en formato UUID de la app cliente. \n    \n- blocked_reason: razón por la cual se agrega el correo a la lista negra."
+			},
+			"response": [
+				{
+					"name": "Faltan parametros",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"pepito@hotmail.com\",\n    \"app_uuid\": \"95806c44-99d0-48f8-bc2c-ed740e022576\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/blacklists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Faltan campos en la solicitud\"\n}"
+				},
+				{
+					"name": "Parametros en formato invalido",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"pepito@hotmail.com\",\n    \"app_uuid\": \"95806c44-99d0-48f8-bc2c-ed740e022576\",\n    \"blocked_reason\": 349389\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/blacklists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "Precondition Failed",
+					"code": 412,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\n    \"message\": \"La información suministrada es erronea\"\n}"
+				},
+				{
+					"name": "Email ya existente en blacklist",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"pepito@hotmail.com\",\n    \"app_uuid\": \"95806c44-99d0-48f8-bc2c-ed740e022576\",\n    \"blocked_reason\": \"Test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/blacklists",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"blacklists"
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": "Text",
+					"header": [],
+					"cookie": [],
+					"body": "{\n    \"message\": \"El email ya se encuentra en la lista negra\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Verificar si email esta en la lista negra",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/blacklists/pepito1@hotmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"blacklists",
+						"pepito1@hotmail.com"
+					]
+				},
+				"description": "Permite verificar que el correo que viene como parámetro dentro de la solicitud HTTP ya hace parte o no de la lista negra de la compañía.  \nParámetros:\n\n- email: Correo electrónico que será verificado si está o no en la lista negra."
+			},
+			"response": [
+				{
+					"name": "Email se encuentra en blacklist",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/blacklists/pepito@hotmail.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"blacklists",
+								"pepito@hotmail.com"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.4 Python/3.10.15"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 19 Oct 2024 20:39:16 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "40"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"exist\": true,\n    \"reason\": \"Test\"\n}"
+				},
+				{
+					"name": "Email no existe en blacklist",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/blacklists/pepito1@hotmail.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"blacklists",
+								"pepito1@hotmail.com"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.4 Python/3.10.15"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 19 Oct 2024 20:39:52 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "21"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"exist\": false\n}"
+				},
+				{
+					"name": "Falta token en la solicitud",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/blacklists/pepito1@hotmail.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"blacklists",
+								"pepito1@hotmail.com"
+							]
+						}
+					},
+					"status": "FORBIDDEN",
+					"code": 403,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.4 Python/3.10.15"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 19 Oct 2024 20:40:31 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "75"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"El token no está en el encabezado de la solicitud.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Salud del microservicio",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "qwerty",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/blacklists/ping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"blacklists",
+						"ping"
+					]
+				},
+				"description": "Permite verificar que el microservicio esté disponible para recibir solicitudes."
+			},
+			"response": [
+				{
+					"name": "Servicio disponible",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/blacklists/ping",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"blacklists",
+								"ping"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.4 Python/3.10.15"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 19 Oct 2024 20:41:51 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "pong"
+				}
+			]
+		}
+	]
+}
