@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - pip install -r requirements.txt
+      - pip install pytest coverage
+  pre_build:
+    commands:
+      - coverage erase
+  build:
+    commands:
+      - python -m coverage run -m unittest discover blacklist/tests/
+  post_build:
+    commands:
+      - python -m coverage report --fail-under=80
+      - python -m coverage html 
+reports:
+  coverage:
+    files:
+      - "htmlcov/*"
+    base-directory: "./"
+    
+artifacts:
+  files:
+    - '**/*'
