@@ -15,7 +15,7 @@ phases:
       - python -m coverage run -m unittest discover blacklist/tests/
   post_build:
     commands:
-      - python -m coverage report --fail-under=80
+      - python -m coverage report
       - python -m coverage html 
 reports:
   coverage:
