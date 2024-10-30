@@ -9,20 +9,15 @@ phases:
       - pip install pytest coverage
   pre_build:
     commands:
-      - coverage erase
+      - echo Running pre-build commands...
+      - pip install pytest pytest-cov
   build:
     commands:
-      - python -m coverage run -m unittest discover blacklist/tests/
+      - echo Running tests with pytest...
+      - pytest --cov=blacklist
   post_build:
     commands:
-      - python -m coverage report
-      - python -m coverage html 
-reports:
-  coverage:
-    files:
-      - "htmlcov/*"
-    base-directory: "./"
-    
+      - echo Post-build commands...
 artifacts:
   files:
     - '**/*'
