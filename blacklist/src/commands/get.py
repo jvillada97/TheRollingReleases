@@ -1,14 +1,8 @@
-from src.models.models import db, Email
-from src.commands.base_command import BaseCommannd
-from sqlalchemy.exc import SQLAlchemyError
-import hashlib
-import uuid
+from blacklist.src.models.models import db, Email
+from blacklist.src.commands.base_command import BaseCommannd
 from flask import jsonify
-from datetime import datetime
-import pytz
-from requests import Response
 import os
-from src.errors.errors import ApiError, NotToken, TokenInvalid, NotFound, BadRequest, EmailExist
+from blacklist.src.errors.errors import ApiError, NotToken, TokenInvalid, NotFound, BadRequest, EmailExist
 
 class GetEmail(BaseCommannd):
     def __init__(self, email, token):

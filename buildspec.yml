@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - pip install -r blacklist/requirements.txt
+      - pip install pytest coverage
+  pre_build:
+    commands:
+      - echo Running pre-build commands...
+      - pip install pytest pytest-cov
+  build:
+    commands:
+      - echo Running tests with pytest...
+      - pytest
+  post_build:
+    commands:
+      - echo Post-build commands...
+artifacts:
+  files:
+    - '**/*'
