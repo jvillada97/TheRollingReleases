@@ -2,10 +2,10 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_restful import Api
-from src.models.models import db
+from blacklist.src.models.models import db
 import os
-from src.errors.errors import ApiError
-from src.blueprints.emails import emails_blueprint
+from blacklist.src.errors.errors import ApiError
+from blacklist.src.blueprints.emails import emails_blueprint
 
 loaded = load_dotenv('.env.development')
 
