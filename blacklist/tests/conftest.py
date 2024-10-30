@@ -7,8 +7,9 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 def pytest_configure(config):
-    env_file = find_dotenv('../.env.test')
+    env_file = find_dotenv('.env.test')
     load_dotenv(env_file)
+    os.environ['FLASK_ENV'] = 'testing'
     print(f"Loaded environment variables from {env_file}")
     print(f"DB_USER: {os.getenv('DB_USER')}")
     print(f"DB_PASSWORD: {os.getenv('DB_PASSWORD')}")
@@ -21,10 +22,6 @@ def pytest_configure(config):
 def test_client():
     from blacklist.application import application as app, db
     app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = (
-        f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@"
-        f"{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
-    )
 
     with app.app_context():
         db.create_all()

@@ -7,17 +7,24 @@ import os
 from blacklist.src.errors.errors import ApiError
 from blacklist.src.blueprints.emails import emails_blueprint
 
+# Cargar variables de entorno
 loaded = load_dotenv('.env.development')
 
-DB_USER = os.environ["DB_USER"]
-DB_PASSWORD = os.environ["DB_PASSWORD"]
-DB_HOST = os.environ["DB_HOST"]
-DB_PORT = os.environ["DB_PORT"]
-DB_NAME =  os.environ["DB_NAME"]
-APP_PORT =  int(os.getenv("APP_PORT", default=3000))
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
+APP_PORT = int(os.getenv("APP_PORT", default=3000))
 
 application = Flask(__name__)
-application.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+# Configuración condicional de la base de datos
+if os.getenv('FLASK_ENV') == 'testing':
+    application.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///:memory:'
+else:
+    application.config["SQLALCHEMY_DATABASE_URI"] = f"postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
 application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 application.config["PROPAGATE_EXCEPTIONS"] = True
 application.register_blueprint(emails_blueprint)

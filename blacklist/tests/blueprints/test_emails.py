@@ -33,5 +33,9 @@ def test_ping(test_client):
     assert response.status_code == 200
     assert response.data.decode() == 'pong'
 
+def test_add(test_client):
+    response = test_client.post('/blacklists', json={'email': 'test@example.com'}, headers={'Authorization ': 'Bearer qwerty'})
+    assert response.status_code == 200
+    
 if __name__ == '__main__':
     pytest.main()
