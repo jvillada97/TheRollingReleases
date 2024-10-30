@@ -14,7 +14,7 @@ phases:
   build:
     commands:
       - echo Running tests with pytest...
-      - pytest --cov=blacklist
+      - pytest
   post_build:
     commands:
       - echo Post-build commands...
