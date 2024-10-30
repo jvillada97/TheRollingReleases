@@ -30,5 +30,5 @@ def read(email):
     else:
         raise NotToken
     
-    return GetEmail(email, token).execute()
+    #return GetEmail(email, token).execute()
  
