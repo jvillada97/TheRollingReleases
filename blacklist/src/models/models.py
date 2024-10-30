@@ -11,7 +11,7 @@ db = SQLAlchemy()
 class Email(db.Model):
     __tablename__ = 'emails'
     id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    app_id = db.Column(UUID(as_uuid=True), nullable=False)
+    app_id = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     reason = db.Column(db.String(255), nullable=True)
     ip_address = db.Column(db.String(255), nullable=True)
