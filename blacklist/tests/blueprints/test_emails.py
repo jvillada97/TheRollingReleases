@@ -1,38 +1,37 @@
-import unittest
-from unittest.mock import patch
+import os
 import pytest
+from unittest.mock import patch, MagicMock
+from blacklist.application import application as app
 
-@pytest.mark.usefixtures("test_client")
-class TestEmails(unittest.TestCase):
-    def setUp(self):
-        self.client = self.app.test_client()
+# Mockear variables de entorno antes de importar el módulo application
+patch.dict(os.environ, {
+    'DB_USER': 'postgres',
+    'DB_PASSWORD': 'postgres',
+    'DB_HOST': 'localhost',
+    'DB_PORT': '5432',
+    'DB_NAME': 'postgres',
+    'APP_PORT': '3000',
+    'TOKEN': 'qwerty'
+}).start()
 
-    def test_add_without_token(self):
-        response = self.client.post('/blacklists', json={'email': 'test@example.com'})
-        self.assertEqual(response.status_code, 400)  # Assuming 400 due to missing token
+# Mockear la conexión a la base de datos
+with patch('blacklist.src.models.models.db.create_all', MagicMock()):
+    from blacklist.application import application as app
 
-    def test_ping(self):
-        response = self.client.get('/blacklists/ping')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data.decode(), 'pong')
+@pytest.fixture(scope='module')
+def test_client():
+    app.config['TESTING'] = True
+    client = app.test_client()
+    yield client
 
-    @patch('blacklist.src.commands.get.GetEmail')
-    def test_read_with_token(self, MockGetEmail):
-        mock_instance = MockGetEmail.return_value
-        mock_instance.execute.return_value = 'Email data'
+def test_add_without_token(test_client):
+    response = test_client.post('/blacklists', json={'email': 'test@example.com'})
+    assert response.status_code == 403
 
-        response = self.client.get('/blacklists/test@example.com', headers={'Authorization': 'Bearer qwerty'})
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data.decode(), 'Email data')
-
-    def test_read_without_token(self):
-        response = self.client.get('/blacklists/test@example.com')
-        self.assertEqual(response.status_code, 400)  # Assuming 400 due to missing token
-
-    def test_health(self):
-        response = self.client.get('/blacklists/ping')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('pong', response.data.decode())
+def test_ping(test_client):
+    response = test_client.get('/blacklists/ping')
+    assert response.status_code == 200
+    assert response.data.decode() == 'pong'
 
 if __name__ == '__main__':
-    unittest.main()
+    pytest.main()

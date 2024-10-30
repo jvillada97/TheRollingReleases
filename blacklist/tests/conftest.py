@@ -1,7 +1,10 @@
 import pytest
 from dotenv import load_dotenv, find_dotenv
-from blacklist.application import application as app, db
 import os
+import sys
+
+# Añadir la raíz del proyecto al PYTHONPATH
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 def pytest_configure(config):
     env_file = find_dotenv('../.env.test')
@@ -16,6 +19,7 @@ def pytest_configure(config):
 
 @pytest.fixture(scope='module')
 def test_client():
+    from blacklist.application import application as app, db
     app.config['TESTING'] = True
     app.config['SQLALCHEMY_DATABASE_URI'] = (
         f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@"
@@ -30,9 +34,9 @@ def test_client():
 
 @pytest.fixture(autouse=True)
 def cleanup(test_client):
+    from blacklist.application import db
     with test_client.application.app_context():
         yield
-        with db.session.begin(subtransactions=True):
-            db.session.remove()
-            db.drop_all()
-            db.create_all()
+        db.session.remove()
+        db.drop_all()
+        db.create_all()
