@@ -19,6 +19,11 @@ phases:
   post_build:
     commands:
       - echo Post-build commands...
+      - |
+        if [ $? -ne 0 ]; then
+          echo "Tests failed, skipping artifact upload."
+          exit 1
+        fi
 artifacts:
   files:
     - '**/*'
