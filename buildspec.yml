@@ -1,5 +1,4 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
@@ -14,17 +13,12 @@ phases:
   build:
     commands:
       - echo Running tests with pytest...
-      - set -e  # Exit immediately if a command exits with a non-zero status
+      - set -e
       - pytest --maxfail=1 --disable-warnings
       - echo "Forcing build failure" && exit 1
   post_build:
     commands:
       - echo Post-build commands...
-      - |
-        if [ $? -ne 0 ]; then
-          echo "Tests failed, skipping artifact upload."
-          exit 1
-        fi
 artifacts:
   files:
     - '**/*'
