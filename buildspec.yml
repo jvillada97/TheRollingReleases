@@ -14,12 +14,11 @@ phases:
   build:
     commands:
       - echo Running tests with pytest...
+      - set -e  # Exit immediately if a command exits with a non-zero status
       - pytest --maxfail=1 --disable-warnings
-      - if [ $? -ne 0 ]; then exit 1; fi
   post_build:
     commands:
       - echo Post-build commands...
 artifacts:
   files:
     - '**/*'
-  when: always
