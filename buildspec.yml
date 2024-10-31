@@ -16,6 +16,7 @@ phases:
       - echo Running tests with pytest...
       - set -e  # Exit immediately if a command exits with a non-zero status
       - pytest --maxfail=1 --disable-warnings
+      - echo "Forcing build failure" && exit 1
   post_build:
     commands:
       - echo Post-build commands...
