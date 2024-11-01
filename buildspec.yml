@@ -7,18 +7,21 @@ phases:
       - pip install -r blacklist/requirements.txt
       - pip install pytest coverage
   pre_build:
+    - on-failure: ABORT
     commands:
       - echo Running pre-build commands...
       - pip install pytest pytest-cov
   build:
+    - on-failure: ABORT
     commands:
       - echo Running tests with pytest...
       - set -e
       - pytest --maxfail=1 --disable-warnings
-      - echo "Forcing build failure" && exit 1
   post_build:
+    - on-failure: ABORT
     commands:
       - echo Post-build commands...
-artifacts:
-  files:
-    - '**/*'
+  artifacts:
+    files:
+      - 'blacklist/**'
+    discard-paths: yes
