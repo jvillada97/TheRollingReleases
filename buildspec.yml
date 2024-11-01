@@ -21,7 +21,7 @@ phases:
     on-failure: ABORT
     commands:
       - echo Post-build commands...
-  artifacts:
-    files:
-      - 'blacklist/**'
-    discard-paths: yes
+artifacts:
+  files:
+    - 'blacklist/**'
+  discard-paths: yes
