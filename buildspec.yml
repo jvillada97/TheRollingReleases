@@ -1,27 +1,39 @@
 version: 0.2
 phases:
   install:
-    runtime-versions:
-      python: 3.8
-    commands:
-      - pip install -r blacklist/requirements.txt
-      - pip install pytest coverage
   pre_build:
     on-failure: ABORT
     commands:
-      - echo Running pre-build commands...
-      - pip install pytest pytest-cov
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 855248502526.dkr.ecr.us-east-1.amazonaws.com
   build:
     on-failure: ABORT
     commands:
-      - echo Running tests with pytest...
-      - set -e
-      - pytest --maxfail=1 --disable-warnings
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t python_app .
+      - docker tag python_app:latest 855248502526.dkr.ecr.us-east-1.amazonaws.com/python_app:latest
   post_build:
     on-failure: ABORT
     commands:
-      - echo Post-build commands...
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push 855248502526.dkr.ecr.us-east-1.amazonaws.com/python_app:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"python_app","imageUri":"855248502526.dkr.ecr.us-east-1.amazonaws.com/python_app:latest"}]' > imagedefinitions.json
+      - printf '{ImageURI: "855248502526.dkr.ecr.us-east-1.amazonaws.com/python_app:latest"}' > imageDetail.json
+      - cat imagedefinitions.json
 artifacts:
   files:
     - 'blacklist/**'
+    - 'imagedefinitions.json'
+    - 'imageDetail.json'
+  secondary-artifacts:
+    DefinitionArtifact:
+      files:
+        - 'appspec.json'
+        - 'taskdef.json'
+    ImageArtifact:
+      files:
+        - 'imageDetail.json'
   discard-paths: yes

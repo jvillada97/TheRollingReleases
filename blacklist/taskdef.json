@@ -1,5 +1,5 @@
 {
-    "executionRoleArn": "arn:aws:iam::312883711942:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::855248502526:role/ecsTaskExecutionRole",
     "containerDefinitions": [
         {
             "portMappings": [
@@ -11,7 +11,7 @@
             ],
             "image": "<IMAGE1_NAME>",
             "essential": true,
-            "name": "Container"
+            "name": "rollingrelease"
         }
     ],
     "requiresCompatibilities": [
@@ -20,5 +20,5 @@
     "networkMode": "awsvpc",
     "cpu": "512",
     "memory": "1024",
-    "family": "Task"
+    "family": "Task-app-therolling"
 }
