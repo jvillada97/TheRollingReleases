@@ -7,7 +7,7 @@
                 "Properties": {
                     "TaskDefinition": "<TASK_DEFINITION>",
                     "LoadBalancerInfo": {
-                        "ContainerName": "Container",
+                        "ContainerName": "rollingcontainer",
                         "ContainerPort": 3000
                     }
                 }

@@ -1,5 +1,5 @@
 {
-    "executionRoleArn": "arn:aws:iam::855248502526:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::390844777092:role/ecsTaskExecutionRole",
     "containerDefinitions": [
         {
             "portMappings": [
@@ -11,7 +11,7 @@
             ],
             "image": "<IMAGE1_NAME>",
             "essential": true,
-            "name": "rollingrelease"
+            "name": "rollingcontainer"
         }
     ],
     "requiresCompatibilities": [
