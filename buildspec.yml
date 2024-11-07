@@ -1,6 +1,12 @@
 version: 0.2
+
 phases:
   install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - echo Installing dependencies...
+      - pip install -r blacklist/requirements.txt
   pre_build:
     on-failure: ABORT
     commands:
@@ -23,6 +29,7 @@ phases:
       - printf '[{"name":"rollingcontainer","imageUri":"390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases/main:latest"}]' > imagedefinitions.json
       - printf '{"ImageURI": "390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases/main:latest"}' > imageDetail.json
       - cat imagedefinitions.json
+
 artifacts:
   files:
     - 'blacklist/**'
