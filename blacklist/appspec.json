@@ -8,7 +8,9 @@
                     "TaskDefinition": "<TASK_DEFINITION>",
                     "LoadBalancerInfo": {
                         "ContainerName": "rollingcontainer",
-                        "ContainerPort": 3000
+                        "ContainerPort": 3000,
+                        "Protocol": "TCP",
+                        "PortName": "rollingcontainer-3000-tcp"
                     }
                 }
             }
