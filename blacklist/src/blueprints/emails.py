@@ -19,7 +19,11 @@ def add():
 
 @emails_blueprint.route('/blacklists/ping', methods = ['GET'])
 def ping():
-    return 'pong', 200
+    return 'pong123', 200
+
+@emails_blueprint.route('/', methods = ['GET'])
+def index():
+    return 'Blacklist API', 200
 
 @emails_blueprint.route('/blacklists/<string:email>', methods = ['GET'])
 def read(email):
