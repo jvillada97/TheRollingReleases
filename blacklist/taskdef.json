@@ -9,12 +9,6 @@
                     "containerPort": 3000
                 }
             ],
-            "environment": [
-                {
-                    "name": "PORT_NAME",
-                    "value": "rollingcontainer-3000-tcp"
-                }
-            ],
             "image": "<IMAGE1_NAME>",
             "essential": true,
             "name": "rollingcontainer"
