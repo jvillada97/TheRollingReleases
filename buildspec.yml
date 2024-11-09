@@ -7,11 +7,13 @@ phases:
     commands:
       - echo Installing dependencies...
       - pip install -r blacklist/requirements.txt
+      - pip install pytest coverage
   pre_build:
     on-failure: ABORT
     commands:
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 390844777092.dkr.ecr.us-east-1.amazonaws.com
+      - pip install pytest pytest-cov
   build:
     on-failure: ABORT
     commands:
@@ -19,6 +21,9 @@ phases:
       - echo Building the Docker image...
       - docker build -t therollingreleases/main .
       - docker tag therollingreleases/main:latest 390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases/main:latest
+      - echo Running tests with pytest...
+      - set -e
+      - pytest --maxfail=1 --disable-warnings
   post_build:
     on-failure: ABORT
     commands:
