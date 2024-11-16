@@ -21,6 +21,10 @@ def add():
 def ping():
     return 'pong', 200
 
+@emails_blueprint.route('/', methods = ['GET'])
+def index():
+    return 'Blacklist API', 200
+
 @emails_blueprint.route('/blacklists/<string:email>', methods = ['GET'])
 def read(email):
     authorization_token = request.headers.get('Authorization')
