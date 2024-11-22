@@ -32,7 +32,7 @@ phases:
       - docker push 390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases:latest
       - echo Writing image definitions file...
       - printf '[{"name":"container-blacklist-app","imageUri":"312883711942.dkr.ecr.us-east-2.amazonaws.com/container_app:latest"}]' > imagedefinitions.json
-      - printf '{"ImageURI":"390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases/main:latest"}' > imageDetail.json
+      - printf '{"ImageURI":"390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases:latest"}' > imageDetail.json
       - cat imagedefinitions.json
 
 artifacts:
