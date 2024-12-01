@@ -19,8 +19,8 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - docker build -t therollingreleases/main .
-      - docker tag therollingreleases/main:latest 390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases/main:latest
+      - docker build -t therollingreleases .
+      - docker tag therollingreleases:latest 390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases:latest
       - echo Running tests with pytest...
       - set -e
       - pytest --maxfail=1 --disable-warnings
@@ -29,10 +29,10 @@ phases:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push 390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases/main:latest
+      - docker push 390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases:latest
       - echo Writing image definitions file...
       - printf '[{"name":"container-blacklist-app","imageUri":"312883711942.dkr.ecr.us-east-2.amazonaws.com/container_app:latest"}]' > imagedefinitions.json
-      - printf '{"ImageURI":"390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases/main:latest"}' > imageDetail.json
+      - printf '{"ImageURI":"390844777092.dkr.ecr.us-east-1.amazonaws.com/therollingreleases:latest"}' > imageDetail.json
       - cat imagedefinitions.json
 
 artifacts:

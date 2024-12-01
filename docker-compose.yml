@@ -25,6 +25,8 @@ services:
     image: blacklist:1.0
     ports:
       - "3000:3000"
+    environment:
+      NEW_RELIC_LICENSE_KEY: 886a9d67c390e80a12e217e362a81313FFFFNRAL
     restart: always
     networks:
       - email_net
